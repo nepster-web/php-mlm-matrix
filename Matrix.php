@@ -12,7 +12,10 @@ use Yii;
 class Matrix extends \yii\base\Widget
 {
 
-    public function test()
+    /**
+     * @return string
+     */
+    public function run()
     {
         return 'success';
     }
