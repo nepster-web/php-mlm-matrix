@@ -1,0 +1,25 @@
+{
+    "name": "nepster-web/yii2-matrix",
+    "description": "Библиотека для работы с mlm матрицами",
+    "type": "yii2-expansion",
+    "keywords": ["yii2", "yii 2", "mlm matrix"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nepster",
+            "email": "nepsterxxx@mail.ru"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/nepster-web/yii2-matrix/issues",
+        "source": "https://github.com/nepster-web/yii2-matrix"
+    },
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "nepster\\matrix\\": ""
+        }
+    }
+}
