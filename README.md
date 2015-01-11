@@ -17,3 +17,25 @@ Matrix for Yii 2
 (зависит от типа, например кубическая матрица разделится еще на 3 новые матрицы). После чего новые матрицы ожидают заполнения
 и цикл повторяется.
 
+
+Установка
+---------
+
+Предпочтительный способ установки этого виджета через [composer](http://getcomposer.org/download/).
+
+Запустите в консоле
+
+```
+php composer.phar require nepster-web/yii2-matrix: dev-master
+```
+
+или добавьте
+
+```
+"nepster-web/yii2-matrix": "dev-master"
+```
+
+в файл `composer.json` в секцию require.
+
+
+
