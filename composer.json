@@ -1,8 +1,8 @@
 {
-    "name": "nepster-web/yii2-matrix",
+    "name": "nepster-web/php-mlm-matrix",
     "description": "Библиотека для работы с mlm матрицами",
-    "type": "yii2-expansion",
-    "keywords": ["yii2", "yii 2", "mlm matrix"],
+    "type": "library",
+    "keywords": ["mlm matrix", "network marketing", "mlm marketing"],
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -11,11 +11,11 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/nepster-web/yii2-matrix/issues",
-        "source": "https://github.com/nepster-web/yii2-matrix"
+        "issues": "https://github.com/nepster-web/php-mlm-matrix/issues",
+        "source": "https://github.com/nepster-web/php-mlm-matrix"
     },
     "require": {
-        "yiisoft/yii2": "*"
+        "php": ">=5.3.1"
     },
     "autoload": {
         "psr-4": {

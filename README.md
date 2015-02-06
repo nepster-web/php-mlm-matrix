@@ -1,7 +1,9 @@
-Matrix for Yii 2
-================
+Библиотека в разработке...
 
-Библиотека помогает реализовать работу MLM Матриц в Вашем проекте.
+MLM Matrix
+==========
+
+Библиотека для работы с MLM матрицами.
 
 
 Что такое MLM матрицы ?
@@ -26,13 +28,13 @@ Matrix for Yii 2
 Запустите в консоле
 
 ```
-php composer.phar require nepster-web/yii2-matrix: dev-master
+php composer.phar require nepster-web/php-mlm-matrix: dev-master
 ```
 
 или добавьте
 
 ```
-"nepster-web/yii2-matrix": "dev-master"
+"nepster-web/php-mlm-matrix": "dev-master"
 ```
 
 в файл `composer.json` в секцию require.
