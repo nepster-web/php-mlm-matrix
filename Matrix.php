@@ -2,21 +2,74 @@
 
 namespace nepster\matrix;
 
-use Yii;
-
-
 /**
  * Class Matrix
  * @package nepster\matrix
  */
-class Matrix extends \yii\base\Widget
+class Matrix
 {
 
     /**
-     * @return string
+     * Генерация массива матрицы
+     * @return array
      */
-    public function run()
+    public function generation()
     {
-        return 'success';
+
     }
+
+    /**
+     * Деление матрицы
+     * @return array
+     */
+    public function division()
+    {
+
+    }
+
+    /**
+     * Компрессия
+     * @return array
+     */
+    public function compression()
+    {
+
+    }
+
+    /**
+     * Взаимозамена
+     * @return array
+     */
+    public function exchange()
+    {
+
+    }
+
+    /**
+     * Определить уровень матрицы
+     * @return int
+     */
+    public function defineLevel()
+    {
+
+    }
+
+    /**
+     * ПОлучить позицию в матрице
+     * @return int
+     */
+    public function getPosition()
+    {
+
+    }
+
+    /**
+     * Получить координаты позиции в матрице
+     * @return array
+     */
+    public function getCoord()
+    {
+
+    }
+
 }
