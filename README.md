@@ -44,7 +44,9 @@ php composer.phar require nepster-web/php-mlm-matrix: dev-master
 --------
 
 **Matrix.php** - Библиотека для работы с матрицами.
+
 **Render.php** - Генератор html кода матрицы.
+
 **shema/matrix.sql** - Схема SQL (MySql) таблиц для матриц.
 
 
@@ -87,7 +89,7 @@ Matrix.php
     });
     $Render->registerCellCallback(function($l, $n, $user) use ($view) {
         return '<div class="cell">
-                    ' . LibMatrix::getPosition($l, $n, $view) . '
+                    ' . Matrix::getPosition($l, $n, $view) . '
                     <div class="user">
                           Аватар
                           <div class="matrix-user-info">
