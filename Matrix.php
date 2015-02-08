@@ -13,20 +13,20 @@ class Matrix
      * Генерация массива матрицы
      *
      * Простой пример использования:
-     * Matrix::generation($views, $levels, $users);
+     * Matrix::generation($view, $levels, $users);
      *
      * Пример использования с callback функцией:
-     * Matrix::generation($views, $levels, $users, function($level, $number, $user) {
+     * Matrix::generation($view, $levels, $users, function($level, $number, $user) {
      *  return $user;
      * });
      *
-     * @var int $views
-     * @var int $levels
-     * @var array $users
-     * @var function $callback
+     * @param int $view
+     * @param int $levels
+     * @param array $users
+     * @param function $callback
      * @return array
      */
-    public static function generation($views, $levels, array $users, $callback = null)
+    public static function generation($view, $levels, array $users, $callback = null)
     {
         $matrix = [];
         $pointer = 1;
@@ -44,7 +44,7 @@ class Matrix
                     }
                 }
             }
-            $pointer *= $views;
+            $pointer *= $view;
         }
         return $matrix;
     }
@@ -53,14 +53,14 @@ class Matrix
      * Получить координаты позиции в матрице
      *
      * Пример использования:
-     * Matrix::getCoordByPosition($position, $views, $levels);
+     * Matrix::getCoordByPosition($position, $view, $levels);
      *
-     * @var int $position
-     * @var int $views
-     * @var int $levels
+     * @param int $position
+     * @param int $view
+     * @param int $levels
      * @return array|false
      */
-    public static function getCoordByPosition($position, $views, $levels)
+    public static function getCoordByPosition($position, $view, $levels)
     {
         $result = 0;
         $pointer = 1;
@@ -74,7 +74,7 @@ class Matrix
                     ];
                 }
             }
-            $pointer *= $views;
+            $pointer *= $view;
         }
         return false;
     }
@@ -83,15 +83,14 @@ class Matrix
      * Получить позицию в матрице
      *
      * Пример использования:
-     * Matrix::getPosition($level, $number, $views)
+     * Matrix::getPosition($level, $number, $view)
      *
-     * @var int $level
-     * @var int $number
-     * @var int $views
-     *
+     * @param int $level
+     * @param int $number
+     * @param int $view
      * @return int
      */
-    public static function getPosition($level, $number, $views)
+    public static function getPosition($level, $number, $view)
     {
         if ((int)$level === 0 && (int)$number === 0) {
             return 1;
@@ -105,7 +104,7 @@ class Matrix
                         return $result;
                     }
                 }
-                $pointer *= $views;
+                $pointer *= $view;
             }
             return false;
         }
@@ -117,7 +116,7 @@ class Matrix
      * Пример использования:
      * Matrix::getPosition($matrix)
      *
-     * @var array $matrix
+     * @param array $matrix
      * @return array|false
      */
     public static function division(array $matrix)
@@ -126,7 +125,7 @@ class Matrix
             return false;
         }
 
-        $views = count($matrix[1]);
+        $view = count($matrix[1]);
         $levels = count($matrix);
 
         $matrices = [];
@@ -134,7 +133,7 @@ class Matrix
 
         for($l = 1; $l < $levels; $l++) {
             $matrices[] = array_chunk($matrix[$l], $pointer);
-            $pointer *= $views;
+            $pointer *= $view;
         }
 
         $countMatrices = count($matrices);
