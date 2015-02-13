@@ -53,17 +53,17 @@ php composer.phar require nepster-web/php-mlm-matrix: dev-master
 Matrix.php
 ----------
 
- **generation($view, $levels, array $users, $callback = null)** - Генерация массива матрицы исходя из вида и ровней.
+ ```generation($view, $levels, array $users, $callback = null)``` - Генерация массива матрицы исходя из вида и ровней.
 
- **getCoordByPosition($position, $view, $levels)** - Получить координаты (уровень и номер) позиции в матрице.
+ ```getCoordByPosition($position, $view, $levels)``` - Получить координаты (уровень и номер) позиции в матрице.
 
- **getPosition($level, $number, $view)** - Получить позицию в матрице.
+ ```getPosition($level, $number, $view)``` - Получить позицию в матрице.
 
- **getCoordFirstFreePosition(array $matrix)** - Получить координаты первой свободной позиции.
+ ```getCoordFirstFreePosition(array $matrix)``` - Получить координаты первой свободной позиции.
 
- **isFilled(array $matrix)** - Проверяет заполнена ли матрица.
+ ```isFilled(array $matrix)``` - Проверяет заполнена ли матрица.
 
- **division()** - Деление матрицы.
+ ```division()``` - Деление матрицы.
 
 
 Пример использования:
