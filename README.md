@@ -40,26 +40,30 @@ php composer.phar require nepster-web/php-mlm-matrix: dev-master
 в файл `composer.json` в секцию require.
 
 
-Описание:
---------
+Структура:
+----------
 
 **Matrix.php** - Библиотека для работы с матрицами.
 
 **Render.php** - Генератор html кода матрицы.
 
-**shema/matrix.sql** - Схема SQL (MySql) таблиц для матриц.
+**shema/matrix.sql** - SQL (MySql) Схема таблиц для матриц.
 
 
 Matrix.php
 ----------
 
- **generation()** - Генерация массива матрицы исходя из вида и ровней.
+ **generation($view, $levels, array $users, $callback = null)** - Генерация массива матрицы исходя из вида и ровней.
 
- **getCoordByPosition()** - Получить координаты (уровень и номер) позиции в матрице.
+ **getCoordByPosition($position, $view, $levels)** - Получить координаты (уровень и номер) позиции в матрице.
 
- **getPosition()** - Получить позицию в матрице.
+ **getPosition($level, $number, $view)** - Получить позицию в матрице.
 
- **division()** - Деление матрицы
+ **getCoordFirstFreePosition(array $matrix)** - Получить координаты первой свободной позиции.
+
+ **isFilled(array $matrix)** - Проверяет заполнена ли матрица.
+
+ **division()** - Деление матрицы.
 
 
 Пример использования:
@@ -75,6 +79,7 @@ Matrix.php
     // Генерация новой матрицы
     $view = 2;
     $levels = 4;
+    $users = [];
     $matrix = Matrix::generation($view, $levels, $users);
 
     // Рендер матрицы

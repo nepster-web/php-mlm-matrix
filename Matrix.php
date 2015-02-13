@@ -8,7 +8,6 @@ namespace nepster\matrix;
  */
 class Matrix
 {
-
     /**
      * Генерация массива матрицы
      *
@@ -108,6 +107,55 @@ class Matrix
             }
             return false;
         }
+    }
+
+    /**
+     * Получить координаты первой свободной позиции в матрице
+     *
+     * Пример использования:
+     * Matrix::getCoordFirstFreePosition($matrix)
+     *
+     * @param array $matrix
+     * @return array|false
+     */
+    public static function getCoordFirstFreePosition(array $matrix)
+    {
+        foreach ($matrix as $l => &$level) {
+            if (is_array($level)) {
+                foreach ($level as $n => &$number) {
+                    if (empty($number)) {
+                        return [
+                            'level' => $l,
+                            'number' => $n,
+                        ];
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет заполнена ли матрица
+     *
+     * Пример использования:
+     * Matrix::isFilled($matrix)
+     *
+     * @param array $matrix
+     * @return bool
+     */
+    public static function isFilled(array $matrix)
+    {
+        foreach ($matrix as $l => &$level) {
+            if (is_array($level)) {
+                foreach ($level as $n => &$number) {
+                    if (empty($number)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /**
