@@ -14,16 +14,6 @@ class Render
     private $_matrix;
 
     /**
-     * @var int
-     */
-    private $_view;
-
-    /**
-     * @var int
-     */
-    private $_levels;
-
-    /**
      * @var function
      */
     private $_cellCallback;
@@ -57,11 +47,9 @@ class Render
     /**
      * @param array $matrix
      */
-    public function __construct(array $matrix)
+    public function __construct(Matrix $matrix)
     {
         $this->_matrix = $matrix;
-        $this->_view = count($matrix[1]);
-        $this->_levels = count($matrix);
     }
 
     /**
@@ -139,10 +127,12 @@ class Render
      */
     protected function generateMatrixHtml()
     {
-        $result = '';
-        $pV = $this->_view <= 2 ? 2 : pow($this->_view, 2);
+        $matrixArray = $this->_matrix->getArray();
 
-        for ($l = 0, $classL = 1; $l < $this->_levels; $l++, $classL++) {
+        $result = '';
+        $pV = $this->_matrix->getView() <= 2 ? 2 : pow($this->_matrix->getView(), 2);
+
+        for ($l = 0, $classL = 1; $l < $this->_matrix->getLevels(); $l++, $classL++) {
 
             $LevelClassCounter = ' level-' . $classL;
             $levelOptions = $this->_levelOptions;
@@ -156,10 +146,11 @@ class Render
 
             $result .= call_user_func_array($this->_levelCallback, [
                 $l,
-                $this->_matrix[$l]
+                $matrixArray[$l],
+                $this->_matrix
             ]);
 
-            $countL = count($this->_matrix[$l]);
+            $countL = count($matrixArray[$l]);
 
             for ($n = 0, $test = 1; $n < $countL; $n++, $test++) {
 
@@ -174,15 +165,16 @@ class Render
                 $result .= call_user_func_array($this->_cellCallback, [
                     $l,
                     $n,
-                    $this->_matrix[$l][$n]
+                    $matrixArray[$l][$n],
+                    $this->_matrix
                 ]);
 
                 if ($l < 3) {
-                    if (($n + 1) != count($this->_matrix[$l]) && (($n + 1) % $this->_view) == 0) {
+                    if (($n + 1) != count($matrixArray[$l]) && (($n + 1) % $this->_matrix->getView()) == 0) {
                         $result .= '<div' . $this->renderTagAttributes($this->_groupSeparatorOptions) . '></div>';
                     }
                 } else {
-                    if ($l > 1 && ( ($n + 1) % $this->_view) == 0) {
+                    if ($l > 1 && ( ($n + 1) % $this->_matrix->getView()) == 0) {
                         $result .= '<div' . $this->renderTagAttributes($this->_clearOptions) . '></div>';
                     }
 
@@ -191,7 +183,7 @@ class Render
                         $result .= '</div>';
                         $test = 0;
 
-                        if (($n + 1) != count($this->_matrix[$l])) {
+                        if (($n + 1) != count($matrixArray[$l])) {
                             $result .= '<div' . $this->renderTagAttributes($this->_groupSeparatorOptions) . '></div>';
                         }
                     }
