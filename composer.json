@@ -2,7 +2,7 @@
     "name": "nepster-web/php-mlm-matrix",
     "description": "Библиотека для работы с mlm матрицами",
     "type": "library",
-    "keywords": ["mlm matrix", "network marketing", "mlm marketing"],
+    "keywords": ["mlm matrix", "network marketing", "mlm marketing", "mlm матрицы", "матрица", "сетевой маркетинг"],
     "license": "BSD-3-Clause",
     "authors": [
         {

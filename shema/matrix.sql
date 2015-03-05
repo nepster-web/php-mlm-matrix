@@ -1,4 +1,19 @@
 -- ----------------------------
+-- Table structure for matrix_type
+-- ----------------------------
+DROP TABLE IF EXISTS `matrix_type`;
+CREATE TABLE `matrix_type` (
+  `type_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Название типа матриц',
+  `price_enter` decimal(12,5) NOT NULL DEFAULT '0.00000' COMMENT 'Стоимость входа',
+  `price_profit` decimal(12,5) NOT NULL DEFAULT '0.00000' COMMENT 'Стоимость награды',
+  `division_algorithm` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Алгоритм деления матриц',
+  `date_create` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
+  `date_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата редактирования',
+  PRIMARY KEY (`type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Типы матриц';
+
+-- ----------------------------
 -- Table structure for matrix
 -- ----------------------------
 DROP TABLE IF EXISTS `matrix`;
@@ -22,21 +37,6 @@ CREATE TABLE `matrix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Матрицы';
 
 -- ----------------------------
--- Table structure for matrix_type
--- ----------------------------
-DROP TABLE IF EXISTS `matrix_type`;
-CREATE TABLE `matrix_type` (
-  `type_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Название типа матриц',
-  `price_enter` decimal(12,5) NOT NULL DEFAULT '0.00000' COMMENT 'Стоимость входа',
-  `price_profit` decimal(12,5) NOT NULL DEFAULT '0.00000' COMMENT 'Стоимость награды',
-  `division_algorithm` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Алгоритм деления матриц',
-  `date_create` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
-  `date_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата редактирования',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Типы матриц';
-
--- ----------------------------
 -- Table structure for matrix_users
 -- ----------------------------
 DROP TABLE IF EXISTS `matrix_users`;
@@ -53,5 +53,5 @@ CREATE TABLE `matrix_users` (
   KEY `matrix_users_matrix_id` (`matrix_id`),
   KEY `matrix_users_user_id` (`user_id`),
   KEY `matrix_users_sponsor_id` (`sponsor_id`),
-  CONSTRAINT `FK_matrix_users_matrix_id` FOREIGN KEY (`matrix_id`) REFERENCES `matrix` (`matrix_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_matrix_users_matrix_id` FOREIGN KEY (`matrix_id`) REFERENCES `matrix` (`matrix_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Пользователи в матрицах';

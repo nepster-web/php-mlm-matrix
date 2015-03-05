@@ -60,18 +60,17 @@ class Matrix
      * @param function $callback
      * @return array
      */
-    public function generation(array $users, $callback = null)
+    public function generation(array $users = [], $callback = null)
     {
         $matrix = [];
         $pointer = 1;
         for ($l = 0; $l < $this->_levels; $l++) {
             for ($n = 0; $n < $pointer; $n++) {
-                $matrix[$l][$n] = [];
+                $matrix[$l][$n] = null;
                 foreach ($users as $user) {
-                    $matrix[$l][$n] = null;
                     if ((isset($user['level']) && $l == $user['level']) && (isset($user['number']) && $user['number'] == $n)) {
                         if ($callback && is_callable($callback)) {
-                            $matrix[$l][$n] = call_user_func_array($callback, [$l, $n, $user]);
+                            $matrix[$l][$n] = call_user_func_array($callback, [$l, $n, $user, $this]);
                         } else {
                             $matrix[$l][$n] = $user;
                         }

@@ -1,5 +1,3 @@
-Библиотека в разработке...
-
 MLM Matrix
 ==========
 
@@ -41,7 +39,7 @@ php composer.phar require nepster-web/php-mlm-matrix: dev-master
 
 
 Структура:
-----------
+---------
 
 **Matrix.php** - Библиотека для работы с матрицами.
 
@@ -50,37 +48,135 @@ php composer.phar require nepster-web/php-mlm-matrix: dev-master
 **shema/matrix.sql** - SQL (MySql) Схема таблиц для матриц.
 
 
-Matrix.php
-----------
 
- ```generation($view, $levels, array $users, $callback = null)``` - Генерация массива матрицы исходя из вида и ровней.
+Примеры использования:
+----------------------
 
- ```getCoordByPosition($position, $view, $levels)``` - Получить координаты (уровень и номер) позиции в матрице.
+**Генерация пустой матрицы**
 
- ```getPosition($level, $number, $view)``` - Получить позицию в матрице.
+```php
+    $view = 2;
+    $level = 3;
+    $matrix = new Matrix($view, $level);
+    $matrix->generation();
+    $matrix->getArray(); // На выходе массив матрицы
+```
 
- ```getCoordFirstFreePosition(array $matrix)``` - Получить координаты первой свободной позиции.
 
- ```isFilled(array $matrix)``` - Проверяет заполнена ли матрица.
+**Заполняем матрицу пользователями**
 
- ```division()``` - Деление матрицы.
+```php
+    $users = [
+        [
+            'level' => 0,
+            'number' => 0,
+            'user' => 'Nepster',
+        ]
+    ];
+    $matrix = new Matrix($view, $level);
+    $matrix->generation($users);
+    $matrix->getArray();
+```    
+
+***Обратите внимание***
+Каждый массив должен содержать ключи **level** и **number**, на основе которых определяется позиция в матрице.
+
+Можно использовать callback функцию для персональных задач:
+
+```php
+    $users = [
+        [
+            'level' => 0,
+            'number' => 0,
+            'user' => 'Nepster',
+        ]
+    ];
+    $function = function ($l, $n, $user, $matrix) {
+        $user['position'] = $matrix->getPosition($user['level'], $user['number']);
+        return $user;
+    };
+    $matrix = new Matrix($view, $level);
+    $matrix->generation($users, $function);
+    $matrix->getArray();
+```    
 
 
-Пример использования:
----------------------
+**Все доступные функции**
 
-**Рендер матрицы:**
+```php
+    // Генерация массива матрицы
+    generation(array $users = [], $callback = null)
+    
+    // Получить массив матрицы
+    getArray()
+    
+    // Вид
+    getView()
+    
+    // Кол-во уровней
+    getLevels()
+        
+    // Получить координаты позиции
+    getCoordByPosition($position)
+    
+    // Получить номер позиции
+    getPosition($level, $number)
+        
+    // Получить координаты первой свободной позиции в матрице
+    getCoordFirstFreePosition()
+        
+    // Получить все свободные координаты в матрице
+    getFreeCoords()
+    
+    // Получить все свободные позиции в матрице
+    getFreePositions()
+    
+    // Проверяет заполнена ли матрица
+    isFilled()
+    
+    // Деление матрицы
+    division()
+```
+
+
+**Инструкция**
+
+Для примера в данной библиотеке представлена схема базы данных, которая состоит из 3 таблиц:
+    matrix_type - Типы матриц
+    matrix - Все матрицы
+    matrix_users - Пользователи в матрицах
+
+Чтобы работать с матрицами необходимо создать запись в таблице matrix_type (например Пекет №1 за 10$), создать саму матрицу в таблице matrix и активировать пользователей.
+Под активацией пользователей подразумевается записи в таблицу matrix_users. Чтобы показать матрицу на экран, необходимо извлечь массив пользователей 
+и сгенерировать матрицу, после чего обратиться к рендеру.
+
+После каждой активации не забывайте проверять заполнена матрица или нет. Это можно сделать вызвав метод **isFilled()**, который вернет true если в матрице 
+больше нет свободных позиций. В таком случае вам необходимо вызвать метод **division()** и сохранить новые матрицы в таблицу matrix, также не забудьте после деления 
+добавить новые записи в таблицу matrix_users и закрыть старую матрицу присвоив ей определенный статус. 
+
+
+Рендер матрицы:
+---------------
 
 ```php
     use nepster\matrix\Matrix;
     use nepster\matrix\Render;
 
+    // Генерация матрицы
+    $users = [
+        [
+            'level' => 0,
+            'number' => 0,
+            'user' => 'Nepster',
+        ]
+    ];
+    $function = function ($l, $n, $user, $matrix) {
+        $user['position'] = $matrix->getPosition($user['level'], $user['number']);
+        return $user;
+    };
+    $matrix = new Matrix(2, 3);
+    $matrix->generation($users, $function);
 
-    // Генерация новой матрицы
-    $view = 2;
-    $levels = 4;
-    $users = [];
-    $matrix = Matrix::generation($view, $levels, $users);
 
     // Рендер матрицы
     $Render = new Render($matrix);
@@ -92,17 +188,17 @@ Matrix.php
     $Render->registerLevelCallback(function($l, $users) {
         return '<div class="level-counter">Уровень ' . (++$l) . '</div>';
     });
-    $Render->registerCellCallback(function($l, $n, $user) use ($view) {
+    $Render->registerCellCallback(function($level, $number, $user, $matrix) {
         return '<div class="cell">
-                    ' . Matrix::getPosition($l, $n, $view) . '
-                    <div class="user">
-                          Аватар
-                          <div class="matrix-user-info">
-                            Дополнительная информация
-                          </div>
-                    </div>
-                    Логин
-                </div>';
+                ' . $matrix->getPosition($level, $number) . '
+                <div class="user">
+                      Аватар
+                      <div class="matrix-user-info">
+                        Дополнительная информация
+                      </div>
+                </div>
+                Логин
+            </div>';
     });
     echo $Render->show();
 ```
@@ -206,5 +302,4 @@ Matrix.php
 
 </body>
 </html>
-
 ```
