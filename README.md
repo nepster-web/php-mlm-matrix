@@ -26,13 +26,13 @@ MLM Matrix
 Запустите в консоле
 
 ```
-php composer.phar require nepster-web/php-mlm-matrix: dev-master
+php composer.phar require --prefer-dist nepster-web/php-mlm-matrix "*"
 ```
 
 или добавьте
 
 ```
-"nepster-web/php-mlm-matrix": "dev-master"
+"nepster-web/php-mlm-matrix": "*"
 ```
 
 в файл `composer.json` в секцию require.
