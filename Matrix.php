@@ -3,7 +3,7 @@
 namespace nepster\matrix;
 
 /**
- * Class Matrix
+ * Matrix
  * @package nepster\matrix
  */
 class Matrix
@@ -57,7 +57,7 @@ class Matrix
      * });
      *
      * @param array $users
-     * @param function $callback
+     * @param $callback
      * @return array
      */
     public function generation(array $users = [], $callback = null)
@@ -175,8 +175,7 @@ class Matrix
      * Пример использования:
      * $matrix->getCoordFirstFreePosition()
      *
-     * @param array $matrix
-     * @return array|false
+     * @return array|bool
      */
     public function getCoordFirstFreePosition()
     {
@@ -268,6 +267,26 @@ class Matrix
     }
 
     /**
+     * Возвращает все родительские координаты указанной ячейки
+     *
+     * Пример использования:
+     * $matrix->getParentsCoordsByCoord($coord)
+     *
+     * @param array $coord
+     * @return array
+     */
+    public function getParentsCoordsByCoord(array $coord)
+    {
+        $parents = [];
+        while ($coord['level'] > 0) {
+            $coord['level']--;
+            $coord['number'] = intval($coord['number'] / $this->_view);
+            $parents[] = ['number' => $coord['number'], 'level' => $coord['level']];
+        }
+        return $parents;
+    }
+
+    /**
      * Деление матрицы
      *
      * Пример использования:
@@ -306,5 +325,5 @@ class Matrix
 
         return $newMatrices;
     }
-    
+
 }
