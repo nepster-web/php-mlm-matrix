@@ -124,9 +124,9 @@ class Matrix
     {
         $result = 0;
         $pointer = 1;
-        for ($l = 0; $l < $this->_levels; $l ++) {
-            for ($n = 0; $n < $pointer; $n ++) {
-                $result ++;
+        for ($l = 0; $l < $this->_levels; $l++) {
+            for ($n = 0; $n < $pointer; $n++) {
+                $result++;
                 if ($result == $position) {
                     return [
                         'level' => $l,
@@ -157,7 +157,7 @@ class Matrix
             $result = 0;
             $pointer = 1;
             for ($l = 0; $l <= $level; $l++) {
-                for ($n = 0; $n < $pointer; $n ++) {
+                for ($n = 0; $n < $pointer; $n++) {
                     $result++;
                     if ($l == $level && $n == $number) {
                         return $result;
@@ -194,6 +194,52 @@ class Matrix
             }
         }
         return false;
+    }
+
+    /**
+     * Возвращает координаты всех ячеек сектора текущей ячейки
+     *
+     * Пример использования:
+     * $matrix->getCoordBySector($level, $number, $deep, $all)
+     *
+     * @param $number
+     * @param int $deep
+     * @param bool $all
+     * @return array
+     */
+    public function getCoordBySector($level, $number, $deep = 1, $all = false)
+    {
+        $number = [$number];
+        $possible = [];
+        $new_level_children = [];
+        $deep = ($deep < 0) ? 1 : (int)$deep;
+
+        $i = 1;
+        while ($deep != 0) {
+            $new_level_children = [];
+            foreach ($number as $pos) {
+                $new_level_children = array_merge($new_level_children, range($pos * $this->_view, ($pos + 1) * $this->_view - 1));
+            }
+
+            $new_level_result = [];
+
+            foreach ($new_level_children as $child) {
+                $new_level_result[] = [
+                    'level' => $level + $i,
+                    'number' => $child
+                ];
+            }
+
+            $possible = array_merge($possible, $new_level_result);
+            $number = $new_level_children;
+            $deep--;
+            $i++;
+        }
+
+        if ($all) {
+            return $possible;
+        }
+        return $new_level_result;
     }
 
     /**
