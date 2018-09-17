@@ -1,10 +1,11 @@
 <?php
 
-namespace nepster\matrix;
+namespace Nepster\Matrix;
 
 /**
  * Class Render
- * @package nepster\matrix
+ *
+ * @package Nepster\Matrix
  */
 class Render
 {

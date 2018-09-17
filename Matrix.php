@@ -1,10 +1,12 @@
 <?php
 
-namespace nepster\matrix;
+namespace Nepster\Matrix;
 
 /**
- * Matrix
- * @package nepster\matrix
+ * Class Matrix
+ *
+ * @package Nepster\Matrix
+ *
  */
 class Matrix
 {
@@ -149,7 +151,7 @@ class Matrix
      * @param int $number
      * @return int
      */
-    public function getPosition($level, $number)
+    public function getPosition($level, $number): int
     {
         if ((int)$level === 0 && (int)$number === 0) {
             return 1;

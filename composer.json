@@ -1,9 +1,9 @@
 {
     "name": "nepster-web/php-mlm-matrix",
-    "description": "Библиотека для работы с mlm матрицами",
+    "description": "Library for working with mlm matrices",
     "type": "library",
     "keywords": ["mlm matrix", "network marketing", "mlm marketing"],
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "authors": [
         {
             "name": "Nepster",
@@ -15,11 +15,11 @@
         "source": "https://github.com/nepster-web/php-mlm-matrix"
     },
     "require": {
-        "php": ">=5.3.1"
+        "php": ">=7.2"
     },
     "autoload": {
         "psr-4": {
-            "nepster\\matrix\\": ""
+            "Nepster\\Matrix\\": ""
         }
     }
 }
