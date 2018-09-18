@@ -13,65 +13,54 @@ class Matrix
     /**
      * @var int
      */
-    private $_view = 2;
+    private $view = 2;
 
     /**
      * @var int
      */
-    private $_levels = 4;
+    private $levels = 4;
 
     /**
-     * @var array
+     * @var array|null
      */
-    private $_users = [];
+    private $generatedMatrix;
 
     /**
-     * @var callback
+     * Matrix constructor.
+     * @param int $view
+     * @param int $levels
      */
-    private $_callback = null;
-
-    /**
-     * @var array
-     */
-    private $_generation = null;
-
-    /**
-     * Init
-     *
-     * @param $view
-     * @param $levels
-     */
-    public function __construct($view, $levels)
+    public function __construct(int $view, int $levels)
     {
-        $this->_view = (int)$view;
-        $this->_levels = (int)$levels;
+        $this->view = $view;
+        $this->levels = $levels;
     }
 
     /**
      * Генерация массива матрицы
      *
      * Простой пример использования:
-     * $matrix->generation($view, $levels, $users);
+     * $matrix->generation($users);
      *
      * Пример использования с callback функцией:
-     * $matrix->generation($view, $levels, $users, function($level, $number, $user) {
+     * $matrix->generation(array $users, function(int $level, int $number, array $user) {
      *  return $user;
      * });
      *
      * @param array $users
-     * @param $callback
+     * @param callable|null $callback
      * @return array
      */
-    public function generation(array $users = [], $callback = null)
+    public function generation(array $users = [], callable $callback = null): array
     {
         $matrix = [];
         $pointer = 1;
-        for ($l = 0; $l < $this->_levels; $l++) {
+        for ($l = 0; $l < $this->levels; $l++) {
             for ($n = 0; $n < $pointer; $n++) {
                 $matrix[$l][$n] = null;
                 foreach ($users as $user) {
-                    if ((isset($user['level']) && $l == $user['level']) && (isset($user['number']) && $user['number'] == $n)) {
-                        if ($callback && is_callable($callback)) {
+                    if ((isset($user['level']) && $l === $user['level']) && (isset($user['number']) && $user['number'] === $n)) {
+                        if ($callback) {
                             $matrix[$l][$n] = call_user_func_array($callback, [$l, $n, $user, $this]);
                         } else {
                             $matrix[$l][$n] = $user;
@@ -80,37 +69,37 @@ class Matrix
                     }
                 }
             }
-            $pointer *= $this->_view;
+            $pointer *= $this->view;
         }
-        $this->_generation = $matrix;
-        return $matrix;
+
+        return $this->generatedMatrix = $matrix;
     }
 
     /**
      * Вид матрицы
      * @return int
      */
-    public function getView()
+    public function getView(): int
     {
-        return $this->_view;
+        return $this->view;
     }
 
     /**
      * Кол-во уровней
      * @return int
      */
-    public function getLevels()
+    public function getLevels(): int
     {
-        return $this->_levels;
+        return $this->levels;
     }
 
     /**
      * Получить массив матрицы
      * @return array
      */
-    public function getArray()
+    public function getArray(): array
     {
-        return $this->_generation;
+        return $this->generatedMatrix;
     }
 
     /**
@@ -120,25 +109,26 @@ class Matrix
      * $matrix->getCoordByPosition($position);
      *
      * @param int $position
-     * @return array|false
+     * @return array|null
      */
-    public function getCoordByPosition($position)
+    public function getCoordByPosition(int $position): ?array
     {
         $result = 0;
         $pointer = 1;
-        for ($l = 0; $l < $this->_levels; $l++) {
+        for ($l = 0; $l < $this->levels; $l++) {
             for ($n = 0; $n < $pointer; $n++) {
                 $result++;
-                if ($result == $position) {
+                if ($result === $position) {
                     return [
                         'level' => $l,
                         'number' => $n
                     ];
                 }
             }
-            $pointer *= $this->_view;
+            $pointer *= $this->view;
         }
-        return false;
+
+        return null;
     }
 
     /**
@@ -151,7 +141,7 @@ class Matrix
      * @param int $number
      * @return int
      */
-    public function getPosition($level, $number): int
+    public function getPosition(int $level, int $number): int
     {
         if ((int)$level === 0 && (int)$number === 0) {
             return 1;
@@ -161,11 +151,11 @@ class Matrix
             for ($l = 0; $l <= $level; $l++) {
                 for ($n = 0; $n < $pointer; $n++) {
                     $result++;
-                    if ($l == $level && $n == $number) {
+                    if ($l === $level && $n === $number) {
                         return $result;
                     }
                 }
-                $pointer *= $this->_view;
+                $pointer *= $this->view;
             }
             return false;
         }
@@ -177,12 +167,12 @@ class Matrix
      * Пример использования:
      * $matrix->getCoordFirstFreePosition()
      *
-     * @return array|bool
+     * @return array|null
      */
-    public function getCoordFirstFreePosition()
+    public function getCoordFirstFreePosition(): ?array
     {
-        if (is_array($this->_generation)) {
-            foreach ($this->_generation as $l => &$level) {
+        if (is_array($this->generatedMatrix)) {
+            foreach ($this->generatedMatrix as $l => &$level) {
                 if (is_array($level)) {
                     foreach ($level as $n => &$number) {
                         if (empty($number)) {
@@ -195,7 +185,7 @@ class Matrix
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -204,36 +194,38 @@ class Matrix
      * Пример использования:
      * $matrix->getCoordBySector($level, $number, $deep, $all)
      *
-     * @param $number
+     * @param int $level
+     * @param int $number
      * @param int $deep
      * @param bool $all
      * @return array
      */
-    public function getCoordBySector($level, $number, $deep = 1, $all = false)
+    public function getCoordBySector(int $level, int $number, int $deep = 1, bool $all = false): array
     {
         $number = [$number];
         $possible = [];
-        $new_level_children = [];
+        $newResultLevel = [];
         $deep = ($deep < 0) ? 1 : (int)$deep;
 
         $i = 1;
         while ($deep != 0) {
-            $new_level_children = [];
+            $newChildrenLevel = [];
             foreach ($number as $pos) {
-                $new_level_children = array_merge($new_level_children, range($pos * $this->_view, ($pos + 1) * $this->_view - 1));
+                $newChildrenLevel = array_merge($newChildrenLevel,
+                    range($pos * $this->view, ($pos + 1) * $this->view - 1));
             }
 
-            $new_level_result = [];
+            $newResultLevel = [];
 
-            foreach ($new_level_children as $child) {
-                $new_level_result[] = [
+            foreach ($newChildrenLevel as $child) {
+                $newResultLevel[] = [
                     'level' => $level + $i,
                     'number' => $child
                 ];
             }
 
-            $possible = array_merge($possible, $new_level_result);
-            $number = $new_level_children;
+            $possible = array_merge($possible, $newResultLevel);
+            $number = $newChildrenLevel;
             $deep--;
             $i++;
         }
@@ -241,7 +233,7 @@ class Matrix
         if ($all) {
             return $possible;
         }
-        return $new_level_result;
+        return $newResultLevel;
     }
 
     /**
@@ -252,11 +244,11 @@ class Matrix
      *
      * @return array
      */
-    public function getFreeCoords()
+    public function getFreeCoords(): array
     {
         $result = [];
-        if (is_array($this->_generation)) {
-            foreach ($this->_generation as $l => &$level) {
+        if (is_array($this->generatedMatrix)) {
+            foreach ($this->generatedMatrix as $l => &$level) {
                 if (is_array($level)) {
                     foreach ($level as $n => &$number) {
                         if (empty($number)) {
@@ -280,7 +272,7 @@ class Matrix
      *
      * @return array
      */
-    public function getFreePositions()
+    public function getFreePositions(): array
     {
         $result = [];
         $freeCoords = $this->getFreeCoords();
@@ -298,10 +290,10 @@ class Matrix
      *
      * @return bool
      */
-    public function isFilled()
+    public function isFilled(): bool
     {
-        if (is_array($this->_generation)) {
-            foreach ($this->_generation as $l => &$level) {
+        if (is_array($this->generatedMatrix)) {
+            foreach ($this->generatedMatrix as $l => &$level) {
                 if (is_array($level)) {
                     foreach ($level as $n => &$number) {
                         if (empty($number)) {
@@ -323,12 +315,12 @@ class Matrix
      * @param array $coord
      * @return array
      */
-    public function getParentsCoordsByCoord(array $coord)
+    public function getParentsCoordsByCoord(array $coord): array
     {
         $parents = [];
         while ($coord['level'] > 0) {
             $coord['level']--;
-            $coord['number'] = intval($coord['number'] / $this->_view);
+            $coord['number'] = intval($coord['number'] / $this->view);
             $parents[] = ['number' => $coord['number'], 'level' => $coord['level']];
         }
         return $parents;
@@ -340,20 +332,20 @@ class Matrix
      * Пример использования:
      * $matrix->division()
      *
-     * @return array|false
+     * @return array
      */
-    public function division()
+    public function division(): array
     {
-        if (!is_array($this->_generation) || !isset($this->_generation[1])) {
-            return false;
+        if (!is_array($this->generatedMatrix) || !isset($this->generatedMatrix[1])) {
+            return false; // TODO: exeption
         }
 
         $matrices = [];
         $pointer = 1;
 
-        for ($l = 1; $l < $this->_levels; $l++) {
-            $matrices[] = array_chunk($this->_generation[$l], $pointer);
-            $pointer *= $this->_view;
+        for ($l = 1; $l < $this->levels; $l++) {
+            $matrices[] = array_chunk($this->generatedMatrix[$l], $pointer);
+            $pointer *= $this->view;
         }
 
         $countMatrices = count($matrices);
