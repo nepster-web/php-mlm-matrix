@@ -3,6 +3,7 @@
 use Nepster\Matrix\Coord;
 use Nepster\Matrix\Matrix;
 use Nepster\Matrix\MatrixManager;
+use Nepster\Matrix\PositionManager;
 
 include '../vendor/autoload.php';
 
@@ -44,15 +45,6 @@ print_r($matrixFinder->findFreePositions());
 
 */
 
-echo '<hr>';
+echo '<hr>';;
 
-$matrixFinder = new MatrixManager($matrix);
-print_r($matrixFinder->findParentsCoords(new Coord(2, 3)));
-
-
-
-
-echo '<hr>';
-
-//print_r($matrixFinder->findCoordBySector(2, 3, 1));
 
