@@ -2,7 +2,7 @@
 
 use Nepster\Matrix\Coord;
 use Nepster\Matrix\Matrix;
-use Nepster\Matrix\CellFinder;
+use Nepster\Matrix\MatrixManager;
 
 include '../vendor/autoload.php';
 
@@ -13,43 +13,46 @@ $matrix = new Matrix(2, 3);
 print_r($matrix);
 var_dump($matrix->isFilled());
 
+/*
+
 echo '<hr>';
 
 $matrixFinder = new CellFinder($matrix);
-print_r($matrixFinder->getCoordByPosition(1));
+print_r($matrixFinder->findCoordByPosition(3));
 
 
 echo '<hr>';
 
-print_r($matrixFinder->getPosition(new Coord(0, 0)));
+print_r($matrixFinder->findPosition(new Coord(0, 0)));
 
 
 echo '<hr>';
 
-print_r($matrixFinder->getFirstFreeCoord());
+print_r($matrixFinder->findFirstFreeCoord());
 
 
 echo '<hr>';
 
-print_r($matrixFinder->getFreeCoords());
-
-
-
-
-echo '<hr>';
-
-print_r($matrixFinder->getFreePositions());
-
-
-
-echo '<hr>';
-
-print_r($matrixFinder->getParentsCoords(new Coord(2, 3)));
+print_r($matrixFinder->findFreeCoords());
 
 
 
 
 echo '<hr>';
 
-print_r($matrixFinder->getCoordBySector(2, 3, 1));
+print_r($matrixFinder->findFreePositions());
+
+*/
+
+echo '<hr>';
+
+$matrixFinder = new MatrixManager($matrix);
+print_r($matrixFinder->findParentsCoords(new Coord(2, 3)));
+
+
+
+
+echo '<hr>';
+
+//print_r($matrixFinder->findCoordBySector(2, 3, 1));
 

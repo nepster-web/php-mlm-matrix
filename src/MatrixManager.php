@@ -3,14 +3,11 @@
 namespace Nepster\Matrix;
 
 /**
- * TODO: название класса
- *
- * Class Matrix
+ * Class MatrixManager
  *
  * @package Nepster\Matrix
- *
  */
-class CellFinder
+class MatrixManager
 {
     /**
      * @var array
@@ -27,7 +24,7 @@ class CellFinder
     }
 
     /**
-     * Get the coordinates of the position in the matrix
+     * Converts position to coordinates
      *
      * For example:
      * position: 1 - [depth: 0, number 0]
@@ -39,13 +36,13 @@ class CellFinder
      * @param int $position
      * @return Coord|null
      */
-    public function getCoordByPosition(int $position): ?Coord
+    public function positionToCoord(int $position): ?Coord
     {
         $result = 0;
         $pointer = 1;
-        for ($d = 0; $d < $this->matrix->getDepth(); $d++) {
-            for ($n = 0; $n < $pointer; $n++) {
-                $result++;
+        for ($d = 0; $d < $this->matrix->getDepth(); ++$d) {
+            for ($n = 0; $n < $pointer; ++$n) {
+                ++$result;
                 if ($result === $position) {
                     return new Coord($d, $n);
                 }
@@ -57,10 +54,7 @@ class CellFinder
     }
 
     /**
-     * TODO: проблема с большими числами
-     * TODO: выходим за придел матрицы при поиске
-     *
-     * Get the position in the matrix
+     * Converts coordinates to position
      *
      * For example:
      * [depth: 0, number 0] - position: 1
@@ -72,19 +66,23 @@ class CellFinder
      * @param Coord $coord
      * @return int|null
      */
-    public function getPosition(Coord $coord): ?int
+    public function coordToPosition(Coord $coord): ?int
     {
         if ($coord->getDepth() === 0 && $coord->getNumber() === 0) {
             return 1;
         }
 
-        $result = 0;
+        if ($coord->getDepth() > $this->matrix->getDepth()) {
+            return null;
+        }
+
+        $position = 0;
         $pointer = 1;
-        for ($l = 0; $l <= $coord->getDepth(); $l++) {
-            for ($n = 0; $n < $pointer; $n++) {
-                $result++;
-                if ($l === $coord->getDepth() && $n === $coord->getNumber()) {
-                    return $result;
+        for ($d = 0; $d < $this->matrix->getDepth(); ++$d) {
+            for ($n = 0; $n < $pointer; ++$n) {
+                ++$position;
+                if ($d === $coord->getDepth() && $n === $coord->getNumber()) {
+                    return $position;
                 }
             }
             $pointer *= $this->matrix->getPow();
@@ -94,11 +92,11 @@ class CellFinder
     }
 
     /**
-     * Get the first free matrix coordinates
+     * Find first free matrix coordinates
      *
      * @return Coord|null
      */
-    public function getFirstFreeCoord(): ?Coord
+    public function findFirstFreeCoord(): ?Coord
     {
         foreach ($this->matrix->toArray() as $d => $depth) {
             if (is_array($depth)) {
@@ -114,11 +112,11 @@ class CellFinder
     }
 
     /**
-     * Get all free coordinates in the matrix
+     * Find all free coordinates in the matrix
      *
      * @return array
      */
-    public function getFreeCoords(): array
+    public function findFreeCoords(): array
     {
         $result = [];
         foreach ($this->matrix->toArray() as $l => &$level) {
@@ -135,22 +133,41 @@ class CellFinder
     }
 
     /**
-     * Get all free positions in the matrix
+     * Find all free positions in the matrix
      *
      * @return array
      */
-    public function getFreePositions(): array
+    public function findFreePositions(): array
     {
         $result = [];
-        $freeCoords = $this->getFreeCoords();
+        $freeCoords = $this->findFreeCoords();
 
         /** @var Coord $coord */
         foreach ($freeCoords as $coord) {
-            $result[] = $this->getPosition(new Coord($coord->getDepth(), $coord->getNumber()));
+            $result[] = $this->coordToPosition(new Coord($coord->getDepth(), $coord->getNumber()));
         }
 
         return $result;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * TODO: выходит за пределы матрицы
@@ -160,7 +177,7 @@ class CellFinder
      * @param Coord $coord
      * @return array
      */
-    public function getParentsCoords(Coord $coord): array
+    public function findParentsCoords(Coord $coord): array
     {
         $currentDepth = $coord->getDepth();
         $currentNumber = $coord->getNumber();
@@ -224,7 +241,5 @@ class CellFinder
         }
         return $newResultLevel;
     }
-
-
 
 }

@@ -6,7 +6,6 @@ namespace Nepster\Matrix;
  * Class Matrix
  *
  * @package Nepster\Matrix
- *
  */
 class Matrix
 {
