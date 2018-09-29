@@ -1,13 +1,13 @@
 <?php
 
-namespace Nepster\Matrix;
+namespace Nepster\Matrix\Exception;
 
 use Exception;
 
 /**
  * Class MatrixException
  *
- * @package Nepster\Matrix
+ * @package Nepster\Matrix\Exception
  */
 class MatrixException extends Exception
 {

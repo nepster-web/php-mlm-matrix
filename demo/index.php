@@ -11,8 +11,54 @@ include '../vendor/autoload.php';
 echo '<pre>';
 
 $matrix = new Matrix(2, 3);
-print_r($matrix);
-var_dump($matrix->isFilled());
+//print_r($matrix);
+
+$matrix->addTenant(new Coord(0, 0), function(Coord $coord) {
+    return [
+        'name' => 'Vasa 0 0'
+    ];
+});
+$matrix->addTenant(new Coord(1, 0), function(Coord $coord) {
+    return [
+        'name' => 'Peta 1 0'
+    ];
+});
+$matrix->addTenant(new Coord(1, 1), function(Coord $coord) {
+    return [
+        'name' => 'Olga 1 1'
+    ];
+});
+
+
+$matrix->addTenant(new Coord(2, 0), function(Coord $coord) {
+    return [
+        'name' => 'Vika 2 0'
+    ];
+});
+$matrix->addTenant(new Coord(2, 1), function(Coord $coord) {
+    return [
+        'name' => 'Sana 2 1'
+    ];
+});
+$matrix->addTenant(new Coord(2, 2), function(Coord $coord) {
+    return [
+        'name' => 'Kola 2 2'
+    ];
+});
+$matrix->addTenant(new Coord(2, 3), function(Coord $coord) {
+    return [
+        'name' => 'Bora 2 3'
+    ];
+});
+
+
+
+
+$matrixManager = new MatrixManager($matrix);
+print_r($matrixManager->division());
+
+
+
 
 /*
 

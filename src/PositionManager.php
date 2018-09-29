@@ -92,27 +92,6 @@ class PositionManager
     }
 
     /**
-     * @param Coord $coord
-     * @return bool
-     */
-    public function isValidCoord(Coord $coord): bool
-    {
-        if ($coord->getDepth() < 0 || $coord->getDepth() > $this->matrix->getDepth()) {
-            return false;
-        }
-
-        if ($coord->getNumber() < 0) {
-            return false;
-        }
-
-        if ($coord->getNumber() > (count($this->matrix->toArray()[$coord->getDepth()]) - 1)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Find first free matrix coordinates
      * @return Coord|null
      */
@@ -179,7 +158,7 @@ class PositionManager
      */
     public function findSectorCoordsForNextDepth(Coord $coord): array
     {
-        if ($this->isValidCoord($coord) === false) {
+        if ($this->matrix->isValidCoord($coord) === false) {
             return [];
         }
 
@@ -200,7 +179,7 @@ class PositionManager
 
         foreach ($newChildrenLevel as $child) {
             $newCoord = new Coord($coord->getDepth() + 1, $child);
-            if ($this->isValidCoord($newCoord)) {
+            if ($this->matrix->isValidCoord($newCoord)) {
                 $newResultDepth[] = $newCoord;
             }
         }
