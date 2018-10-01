@@ -16,7 +16,7 @@ $matrix = new Matrix(2, 2);
 
 $matrix->addTenant(null, function(Coord $coord) {
     return [
-
+        'name' => 'Vasa 0 0'
     ];
 });
 
