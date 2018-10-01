@@ -3,6 +3,8 @@
 namespace Nepster\Matrix;
 
 use Nepster\Matrix\Exception\FilledMatrixException;
+use Nepster\Matrix\Exception\MatrixException;
+use Nepster\Matrix\Exception\UnavailablePositionException;
 use Nepster\Matrix\Exception\IncorrectCoordinatesMatrixException;
 
 /**
@@ -43,8 +45,8 @@ class Matrix
 
         $matrix = [];
         $pointer = 1;
-        for ($d = 0; $d < $this->depth; $d++) {
-            for ($n = 0; $n < $pointer; $n++) {
+        for ($d = 0; $d < $this->depth; ++$d) {
+            for ($n = 0; $n < $pointer; ++$n) {
                 $matrix[$d][$n] = null;
             }
             $pointer *= $this->pow;
@@ -78,19 +80,14 @@ class Matrix
     }
 
     /**
-     * Take a position in the matrix
+     * Checks if matrix position is free
      *
      * @param Coord $coord
-     * @param callable $tenant
-     * @throws FilledMatrixException
+     * @return bool
      * @throws IncorrectCoordinatesMatrixException
      */
-    public function addTenant(Coord $coord, callable $tenant): void
+    public function hasTenant(Coord $coord): bool
     {
-        if ($this->isFilled() === true) {
-            throw new FilledMatrixException();
-        }
-
         if ($this->isValidCoord($coord) === false) {
             throw new IncorrectCoordinatesMatrixException();
         }
@@ -99,8 +96,66 @@ class Matrix
             if ($d === $coord->getDepth()) {
                 foreach ($depth as $n => $number) {
                     if ($coord->getNumber() === $n) {
-                        $this->generatedMatrix[$d][$n] = call_user_func_array($tenant, [$coord]);
-                        break;
+                        if ($this->generatedMatrix[$d][$n] === null) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Take this matrix position
+     *
+     * @param Coord|null $coord
+     * @param callable $tenant
+     * @throws FilledMatrixException
+     * @throws IncorrectCoordinatesMatrixException
+     * @throws MatrixException
+     * @throws UnavailablePositionException
+     */
+    public function addTenant(?Coord $coord, callable $tenant): void
+    {
+        if ($this->isFilled() === true) {
+            throw new FilledMatrixException();
+        }
+
+        if ($coord !== null && $this->isValidCoord($coord) === false) {
+            throw new IncorrectCoordinatesMatrixException();
+        }
+
+        if ($coord !== null && $this->hasTenant($coord) === true) {
+            throw new UnavailablePositionException();
+        }
+
+        if ($coord === null) {
+            foreach ($this->generatedMatrix as $d => $depth) {
+                foreach ($depth as $n => $number) {
+                    if ($number === null) {
+                        $result = call_user_func_array($tenant, [new Coord($d, $n)]);
+                        if ($result === null) {
+                            throw new MatrixException('The callable argument $tenant should not return null or be empty');
+                        }
+                        $this->generatedMatrix[$d][$n] = $result;
+                        return;
+                    }
+                }
+            }
+        } else {
+            foreach ($this->generatedMatrix as $d => $depth) {
+                if ($d === $coord->getDepth()) {
+                    foreach ($depth as $n => $number) {
+                        if ($coord->getNumber() === $n) {
+                            $result = call_user_func_array($tenant, [$coord]);
+                            if ($result === null) {
+                                throw new MatrixException('The callable argument $tenant should not return null or be empty');
+                            }
+                            $this->generatedMatrix[$d][$n] = $result;
+                            return;
+                        }
                     }
                 }
             }
@@ -108,7 +163,7 @@ class Matrix
     }
 
     /**
-     * Free the position in the matrix
+     * Free this matrix position
      *
      * @param Coord $coord
      * @throws IncorrectCoordinatesMatrixException
@@ -141,7 +196,7 @@ class Matrix
         foreach ($this->generatedMatrix as $d => $depth) {
             if (is_array($depth)) {
                 foreach ($depth as $n => $number) {
-                    if (empty($number)) {
+                    if ($number === null) {
                         return false;
                     }
                 }
