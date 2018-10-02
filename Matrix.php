@@ -151,7 +151,7 @@ class Matrix
      * @param int $number
      * @return int
      */
-    public function getPosition($level, $number): int
+    public function getPosition($level, $number)
     {
         if ((int)$level === 0 && (int)$number === 0) {
             return 1;
