@@ -8,7 +8,7 @@ MLM Matrix
 Library for working with MLM matrices.
 
 
-Что такое MLM матрицы ?
+What is the MLM matrix?
 -----------------------
 
 Among the many MLM compensation plans available today, the Matrix plan is among the most popularly 
@@ -52,10 +52,10 @@ to the `require` section of your `composer.json` file.
 Structure
 ---------
 
-* `demo` - Демонстрационный пример работы библиотеки
-* `doc` - Файлы документации для GitHub
-* `shema` - Пример схемы таблиц для MySQL
-* `src` - Код самой библиотеки
+* `demo` - Library demo
+* `doc` - Documentation files for GitHub
+* `shema` - Sample database table schema (MySQL)
+* `src` - Main library code
 * `tests` - Unit tests
 
 
