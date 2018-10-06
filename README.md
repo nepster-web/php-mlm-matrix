@@ -122,6 +122,9 @@ Testing
 
 ```$ phpunit```
 
+or 
+
+```$ vendor/bin/phpunit```
 
 License
 -------
