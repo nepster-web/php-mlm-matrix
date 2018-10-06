@@ -10,4 +10,14 @@ use Nepster\Matrix\PositionManager;
 class PositionManagerTest extends \PHPUnit\Framework\TestCase
 {
 
+    // positionToCoord
+    // coordToPosition
+    // findFirstFreeCoord
+    // findFreeCoords
+    // findFreePositions
+    // findSectorCoordsForNextDepth
+
+
+
+
 }
