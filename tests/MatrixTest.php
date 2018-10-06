@@ -112,6 +112,14 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
+    public function testCheckInValidCoordWithLongDepth(): void
+    {
+        $matrix = new Matrix(3, 2);
+
+        self::assertFalse($matrix->isValidCoord(new Coord(10, 1)));
+    }
+
+    /** @test */
     public function testCheckInValidCoordWithRandDepth(): void
     {
         $matrix = new Matrix(3, 2);
@@ -148,14 +156,63 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
         $matrix->addTenant(null, function (): string { return uniqid();});
     }
 
+    /** @test */
+    public function testItsAddTenantToFirstFreePosition1(): void
+    {
+        $matrix = new Matrix(2, 2);
 
+        $matrix->addTenant(null, function (): string { return uniqid();});
 
+        self::assertTrue($matrix->hasTenant(new Coord(0, 0)));
+    }
 
-    // TODO: hasTenant
-    // TODO: addTenant
-    // TODO: removeTenant
+    /** @test */
+    public function testItsAddTenantToFirstFreePosition2(): void
+    {
+        $matrix = new Matrix(2, 2);
 
+        $matrix->addTenant(null, function (): string { return uniqid();});
+        $matrix->addTenant(null, function (): string { return uniqid();});
 
+        self::assertTrue($matrix->hasTenant(new Coord(0, 0)));
+        self::assertTrue($matrix->hasTenant(new Coord(1, 0)));
+    }
 
+    /** @test */
+    public function testItsAddTenantToSelectPosition(): void
+    {
+        $matrix = new Matrix(3, 2);
+
+        $matrix->addTenant(new Coord(2, 1), function (): string { return uniqid();});
+
+        self::assertTrue($matrix->hasTenant(new Coord(2, 1)));
+    }
+
+    /** @test */
+    public function testItsHasTenant(): void
+    {
+        $matrix = new Matrix(3, 2);
+
+        $matrix->addTenant(new Coord(2, 1), function (): string { return uniqid();});
+
+        self::assertTrue($matrix->hasTenant(new Coord(2, 1)));
+        self::assertFalse($matrix->hasTenant(new Coord(0, 0)));
+        self::assertFalse($matrix->hasTenant(new Coord(1, 0)));
+        self::assertFalse($matrix->hasTenant(new Coord(1, 1)));
+    }
+
+    /** @test */
+    public function testItsRemoveTenant(): void
+    {
+        $matrix = new Matrix(3, 2);
+
+        $matrix->addTenant(new Coord(2, 1), function (): string { return uniqid();});
+
+        self::assertTrue($matrix->hasTenant(new Coord(2, 1)));
+
+        $matrix->removeTenant(new Coord(2, 1));
+
+        self::assertFalse($matrix->hasTenant(new Coord(2, 1)));
+    }
 
 }

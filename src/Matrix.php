@@ -222,6 +222,10 @@ class Matrix
             return false;
         }
 
+        if (isset($this->generatedMatrix[$coord->getDepth()]) === false) {
+            return false;
+        }
+
         if ($coord->getNumber() > (count($this->generatedMatrix[$coord->getDepth()]) - 1)) {
             return false;
         }
