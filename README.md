@@ -23,9 +23,9 @@ serially from top to bottom or left to right.
 
 ![demo](./doc/images/view.png "")
 
-После того, как матрица будет заполнена, человек на 1 уровне получает вознаграждение, а сама матрица делится еще на несколько матриц
-(зависит от типа, например кубическая матрица разделится еще на 3 новые матрицы). После чего новые матрицы ожидают заполнения
-и цикл повторяется.
+After the matrix is filled, user at level 1 receives a reward and the matrix itself is divided into 
+several matrices. (depends on matrix pow, for example the cubic matrix will be divided into 3 new matrices). 
+After that, new matrices are waiting to be filled and the cycle repeats.
 
 
 Install
