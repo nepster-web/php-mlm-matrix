@@ -136,7 +136,7 @@ class Matrix
                 foreach ($depth as $n => $number) {
                     if ($number === null) {
                         $result = call_user_func_array($tenant, [new Coord($d, $n)]);
-                        if ($result === null || empty($result)) {
+                        if ($result === null || (empty($result) && $result !== false)) {
                             throw new MatrixException('The callable argument $tenant should not return null or be empty');
                         }
                         $this->generatedMatrix[$d][$n] = $result;
@@ -150,7 +150,7 @@ class Matrix
                     foreach ($depth as $n => $number) {
                         if ($coord->getNumber() === $n) {
                             $result = call_user_func_array($tenant, [$coord]);
-                            if ($result === null || empty($result)) {
+                            if ($result === null || (empty($result) && $result !== false)) {
                                 throw new MatrixException('The callable argument $tenant should not return null or be empty');
                             }
                             $this->generatedMatrix[$d][$n] = $result;

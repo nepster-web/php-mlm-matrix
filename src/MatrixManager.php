@@ -57,7 +57,10 @@ class MatrixManager
             foreach ($newMatrixArray as $d => $depth) {
                 foreach ($depth as $n => $number) {
                     $newMatrixList[$m]->addTenant(new Coord($d, $n), function () use ($d, $n, $newMatrixArray) {
-                        return $newMatrixArray[$d][$n];
+                        if (isset($newMatrixArray[$d][$n]) && empty($newMatrixArray[$d][$n]) === false) {
+                            return $newMatrixArray[$d][$n];
+                        }
+                        return false;
                     });
                 }
 
