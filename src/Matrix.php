@@ -2,8 +2,8 @@
 
 namespace Nepster\Matrix;
 
-use Nepster\Matrix\Exception\FilledMatrixException;
 use Nepster\Matrix\Exception\MatrixException;
+use Nepster\Matrix\Exception\FilledMatrixException;
 use Nepster\Matrix\Exception\UnavailablePositionException;
 use Nepster\Matrix\Exception\IncorrectCoordinatesMatrixException;
 

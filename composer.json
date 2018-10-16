@@ -15,7 +15,8 @@
         "source": "https://github.com/nepster-web/php-mlm-matrix"
     },
     "require": {
-        "php": ">=7.2"
+        "php": ">=7.2",
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "7.3.5"

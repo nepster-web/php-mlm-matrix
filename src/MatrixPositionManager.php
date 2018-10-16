@@ -3,11 +3,11 @@
 namespace Nepster\Matrix;
 
 /**
- * Class PositionManager
+ * Class MatrixPositionManager
  *
  * @package Nepster\Matrix
  */
-class PositionManager
+class MatrixPositionManager
 {
     /**
      * @var Matrix

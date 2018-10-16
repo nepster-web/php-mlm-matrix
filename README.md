@@ -117,6 +117,14 @@ Check if there are free positions in the matrix:
 $matrix->isFilled();
 ```
 
+[For more examples, see the demo file.](./demo/index.php)
+
+
+How can I use database for matrices? 
+------------------------------------
+... // TODO
+
+
 Testing
 -------
 
@@ -125,6 +133,7 @@ Testing
 or 
 
 ```$ vendor/bin/phpunit```
+
 
 License
 -------

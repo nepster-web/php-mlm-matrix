@@ -3,14 +3,14 @@
 namespace Nepster\Matrix;
 
 /**
- * Class Render
+ * Class MatrixRender
  *
  * @package Nepster\Matrix
  */
-class Render
+class MatrixRender
 {
     /**
-     * @var array
+     * @var Matrix
      */
     private $matrix;
 
@@ -20,6 +20,11 @@ class Render
     private $cellCallback;
 
     /**
+     * @var callable
+     */
+    private $depthCallback;
+
+    /**
      * @var array
      */
     private $options = ['class' => 'matrix'];
@@ -27,7 +32,7 @@ class Render
     /**
      * @var array
      */
-    private $levelOptions = ['class' => 'level'];
+    private $depthOptions = ['class' => 'depth'];
 
     /**
      * @var array
@@ -45,7 +50,7 @@ class Render
     private $clearOptions = ['style' => 'clear:both'];
 
     /**
-     * Render constructor.
+     * MatrixRender constructor.
      * @param Matrix $matrix
      */
     public function __construct(Matrix $matrix)
@@ -64,9 +69,9 @@ class Render
     /**
      * @param array $options
      */
-    public function setLevelOptions(array $options): void
+    public function setDepthOptions(array $options): void
     {
-        $this->levelOptions = $options;
+        $this->depthOptions = $options;
     }
 
     /**
@@ -82,35 +87,31 @@ class Render
      */
     public function setGroupJoinOptions(array $options): void
     {
-        $this->groupSeparatorOptions = $options;
+        $this->groupJoinOptions = $options;
     }
 
     /**
      * @param array $options
      */
-    public function set_clearOptions(array $options): void
+    public function setClearOptions(array $options): void
     {
         $this->clearOptions = $options;
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      */
-    public function registerCellCallback($callback): void
+    public function registerCellCallback(callable $callback): void
     {
-        if (is_callable($callback)) {
-            $this->cellCallback = $callback;
-        }
+        $this->cellCallback = $callback;
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      */
-    public function registerLevelCallback($callback): void
+    public function registerDepthCallback(callable $callback): void
     {
-        if (is_callable($callback)) {
-            $this->_levelCallback = $callback;
-        }
+        $this->depthCallback = $callback;
     }
 
     /**
@@ -123,68 +124,67 @@ class Render
     }
 
     /**
-     * Генерирует html код матрицы
+     * Generate matrix html
      * @return string
      */
     protected function generateMatrixHtml(): string
     {
-        $matrixArray = $this->matrix->getArray();
+        $matrixArray = $this->matrix->toArray();
 
         $result = '';
-        $pV = $this->matrix->getView() <= 2 ? 2 : pow($this->matrix->getView(), 2);
+        $pV = $this->matrix->getPow() <= 2 ? 2 : pow($this->matrix->getPow(), 2);
 
-        for ($l = 0, $classL = 1; $l < $this->matrix->getLevels(); $l++, $classL++) {
+        for ($d = 0, $classD = 1; $d < $this->matrix->getDepth(); ++$d, ++$classD) {
 
-            $LevelClassCounter = ' level-' . $classL;
-            $levelOptions = $this->levelOptions;
-            if (isset($levelOptions['class'])) {
-                $levelOptions['class'] .= $LevelClassCounter;
+            $depthClassCounter = ' depth-' . $classD;
+            $depthOptions = $this->depthOptions;
+            if (isset($depthOptions['class'])) {
+                $depthOptions['class'] .= $depthClassCounter;
             } else {
-                $levelOptions['class'] = $LevelClassCounter;
+                $depthOptions['class'] = $depthClassCounter;
             }
 
-            $result .= '<div' . $this->renderTagAttributes($levelOptions) . '>';
+            $result .= '<div' . $this->renderTagAttributes($depthOptions) . '>';
 
-            $result .= call_user_func_array($this->_levelCallback, [
-                $l,
-                $matrixArray[$l],
-                $this->matrix
+            $result .= call_user_func_array($this->depthCallback, [
+                $this->matrix,
+                $d,
+                $matrixArray[$d],
             ]);
 
-            $countL = count($matrixArray[$l]);
+            $countL = count($matrixArray[$d]);
 
-            for ($n = 0, $test = 1; $n < $countL; $n++, $test++) {
+            for ($n = 0, $e = 1; $n < $countL; ++$n, ++$e) {
 
-                if ($l < 3) {
-                    /* события до 4 уровня */
+                if ($d < 3) {
+                    /* event before 4 depth */
                 } else {
-                    if ($test == 1) {
+                    if ($e === 1) {
                         $result .= '<div' . $this->renderTagAttributes($this->groupJoinOptions) . '> ';
                     }
                 }
 
                 $result .= call_user_func_array($this->cellCallback, [
-                    $l,
-                    $n,
-                    $matrixArray[$l][$n],
-                    $this->matrix
+                    $this->matrix,
+                    new Coord($d, $n),
+                    $matrixArray[$d][$n],
                 ]);
 
-                if ($l < 3) {
-                    if (($n + 1) != count($matrixArray[$l]) && (($n + 1) % $this->matrix->getView()) == 0) {
+                if ($d < 3) {
+                    if (($n + 1) != count($matrixArray[$d]) && (($n + 1) % $this->matrix->getPow()) === 0) {
                         $result .= '<div' . $this->renderTagAttributes($this->groupSeparatorOptions) . '></div>';
                     }
                 } else {
-                    if ($l > 1 && ( ($n + 1) % $this->matrix->getView()) == 0) {
+                    if ($d > 1 && (($n + 1) % $this->matrix->getPow()) === 0) {
                         $result .= '<div' . $this->renderTagAttributes($this->clearOptions) . '></div>';
                     }
 
-                    if ($test == $pV) {
+                    if ($e === $pV) {
 
                         $result .= '</div>';
-                        $test = 0;
+                        $e = 0;
 
-                        if (($n + 1) != count($matrixArray[$l])) {
+                        if (($n + 1) !== count($matrixArray[$d])) {
                             $result .= '<div' . $this->renderTagAttributes($this->groupSeparatorOptions) . '></div>';
                         }
                     }
@@ -211,16 +211,20 @@ class Render
                 if ($value) {
                     $html .= " $name";
                 }
-            } else if (is_array($value) && $name === 'data') {
-                foreach ($value as $n => $v) {
-                    if (is_array($v)) {
-                        $html .= " $name-$n='" . json_encode($v, JSON_HEX_APOS) . "'";
-                    } else {
-                        $html .= " $name-$n=\"" . htmlspecialchars($v) . '"';
+            } else {
+                if (is_array($value) && $name === 'data') {
+                    foreach ($value as $n => $v) {
+                        if (is_array($v)) {
+                            $html .= " $name-$n='" . json_encode($v, JSON_HEX_APOS) . "'";
+                        } else {
+                            $html .= " $name-$n=\"" . htmlspecialchars($v) . '"';
+                        }
+                    }
+                } else {
+                    if ($value !== null) {
+                        $html .= " $name=\"" . htmlspecialchars($value) . '"';
                     }
                 }
-            } else if ($value !== null) {
-                $html .= " $name=\"" . htmlspecialchars($value) . '"';
             }
         }
 
