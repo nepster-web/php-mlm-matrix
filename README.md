@@ -135,20 +135,20 @@ How can I use database for matrices?
 базы данных и записать его в базу:
 
 ```php
-class Test {
+class MatrixService {
 
     public function findMatrixById(int $id): Matrix
     {
-        // сделайте запрос к таблице matrix, чтобы найти нужную запись 
-        // используйте джоин или другой запрос для таблицы matrix_users, чтобы получить записи о пользователях в текущей матрице
-        // инициализируйте новый обьект Matrix
-        // с помощью метода addTenant добавляйте пользователей в матрицу (основываясь на данных из таблицы matrix_users)
-        // верните сформированный обьект Matrix
+        // you need make a query to the `matrix` table that find the required record
+        // use join or another query to retrieve user data from the `matrix_users` table
+        // initialize new Matrix object
+        // using `addTenant` method that add users to Matrix object (based on data from `matrix_users` table)
+        // return the proper Matrix object
     }
 
     public function saveMatrix(Matrix $matrix): void
     {
-        // Получите массив матрицы с помощью метода $matrix->toArray()
+        // Get the matrix array using the `$matrix->toArray()` method
         // Сформируйте корректный запрос на сохранение данных в базу
         // - Вероятно в реляционной базе данных у Вас будет 2 таблицы (матрицы и пользователи в матрицах)
         // - Не забудте проверить создается новая матрица или редактируется уже существующая
