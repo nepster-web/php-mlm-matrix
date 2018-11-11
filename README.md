@@ -8,6 +8,12 @@ MLM Matrix
 Library for working with MLM matrices.
 
 
+Found an error?
+-----------------------
+If you found an error in the code or grammatical mistake or any inaccuracy, 
+please create [new issues](https://github.com/nepster-web/php-mlm-matrix/issues/new).
+
+
 What is the MLM matrix?
 -----------------------
 
@@ -123,21 +129,18 @@ $matrix->isFilled();
 How can I use database for matrices? 
 ------------------------------------
 
-Исходя из различных специфик сетевых проектов и инструментов веб-разработки, 
-данная библиотека реализовывает только алгоритм работы млм матриц без поддержки 
-какого либо хранилища.
+Based on the different specifics of mlm projects and web development tools,
+this library implements only the algorithm of operation of mlm matrices without storage support.
 
-Однако, если вы работает с базой данных Вы можете легко реализовать хранение и 
-восстаноление матриц из хранилща.
+However, if you works with the database you can easily implement keeping and recovery of matrix objects.
+You can study the example in the file [MySQL schema](shema/matrix.sql). 
 
-Вы можете взглянуть на пример [MySQL схемы](shema/matrix.sql) и отталкиваться от него. 
-К примеру написать некий сервис, который позволит восстановить обьект Matrix из 
-базы данных и записать его в базу:
+For example, create a new service that allows you to write and/or restore the matrix object from the database:
 
 ```php
 class MatrixService {
 
-    public function findMatrixById(int $id): Matrix
+    public function findById(int $id): Matrix
     {
         // you need make a query to the `matrix` table that find the required record
         // use join or another query to retrieve user data from the `matrix_users` table
@@ -146,15 +149,15 @@ class MatrixService {
         // return the proper Matrix object
     }
 
-    public function saveMatrix(Matrix $matrix): void
+    public function save(Matrix $matrix): void
     {
         // Get the matrix array using the `$matrix->toArray()` method
-        // Сформируйте корректный запрос на сохранение данных в базу
-        // - Вероятно в реляционной базе данных у Вас будет 2 таблицы (матрицы и пользователи в матрицах)
-        // - Не забудте проверить создается новая матрица или редактируется уже существующая
+        // Create a valid request to save data to the database
+        // - Most likely in a relational database you will have 2 tables (matrices and matrix_users)
+        // - Don`t forget to check a new matrix is being created or edited an already existing matrix
         
-        // Примечяние1: Записывайте пользователей вместе с depth и number для дальнейшего восстановления 
-        // Примечяние2: Не записывайте в базу данных координаты с пустыми позициями
+        // Note1: Write down users with depth and number for further recovery
+        // Note2: Don`t write coordinates with empty positions to the database.
     }
 
 }
