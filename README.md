@@ -8,7 +8,7 @@ MLM Matrix
 Library for working with MLM matrices.
 
 
-Found an error?
+Did you find an error?
 -----------------------
 If you found an error in the code or grammatical mistake or any inaccuracy, 
 please create [new issues](https://github.com/nepster-web/php-mlm-matrix/issues/new).
@@ -30,8 +30,8 @@ serially from top to bottom or left to right.
 ![demo](./doc/images/view.png "")
 
 After the matrix is filled, user at level 1 receives a reward and the matrix itself is divided into 
-several matrices. (depends on matrix pow, for example the cubic matrix will be divided into 3 new matrices). 
-After that, new matrices are waiting to be filled and the cycle repeats.
+several matrices (depends on matrix pow, for example the cubic matrix will be divided into 3 new matrices). 
+After that, new matrices wait for filling and cycle is repeated.
 
 
 Install
@@ -132,7 +132,7 @@ How can I use database for matrices?
 Based on the different specifics of mlm projects and web development tools,
 this library implements only the algorithm of operation of mlm matrices without storage support.
 
-However, if you works with the database you can easily implement keeping and recovery of matrix objects.
+However, if you works with the database you can easily implement keeping and restore of matrix objects.
 You can study the example in the file [MySQL schema](shema/matrix.sql). 
 
 For example, create a new service that allows you to write and/or restore the matrix object from the database:
@@ -142,11 +142,11 @@ class MatrixService {
 
     public function findById(int $id): Matrix
     {
-        // you need make a query to the `matrix` table that find the required record
-        // use join or another query to retrieve user data from the `matrix_users` table
-        // initialize new Matrix object
-        // using `addTenant` method that add users to Matrix object (based on data from `matrix_users` table)
-        // return the proper Matrix object
+        // You need make a query to the `matrix` table that find the required record
+        // Use join or another query to retrieve user data from the `matrix_users` table
+        // Initialize new Matrix object
+        // Using `addTenant` method that add users to Matrix object (based on data from `matrix_users` table)
+        // Return the proper Matrix object
     }
 
     public function save(Matrix $matrix): void
