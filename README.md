@@ -1,310 +1,179 @@
 MLM Matrix
 ==========
 
-Библиотека для работы с MLM матрицами.
+[![Latest Version](https://img.shields.io/github/tag/nepster-web/php-mlm-matrix.svg?style=flat-square&label=release)](https://github.com/nepster-web/php-mlm-matrix)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Total Downloads](https://img.shields.io/packagist/dt/nepster-web/php-mlm-matrix.svg?style=flat-square)](https://packagist.org/packages/nepster-web/php-mlm-matrix)
+
+Library for working with MLM matrices.
 
 
-Что такое MLM матрицы ?
+Did you find an error?
+-----------------------
+If you found an error in the code or grammatical mistake or any inaccuracy, 
+please create [new issues](https://github.com/nepster-web/php-mlm-matrix/issues/new).
+
+
+What is the MLM matrix?
 -----------------------
 
-В МЛМ в Интернете наиболее популярной формой маркетинг плана является матричный.
-Матрицы могут быть разных видов и с разным кол-во уровней. Обычно насчитывается 3 — 4 уровня.
-Например кубическая матрица из 3 уровней будет выглядить так:
+Among the many MLM compensation plans available today, the Matrix plan is among the most popularly 
+recommended owing to its uncomplicated structure. As it is quite simple in understanding it is 
+considered very useful and resourceful and can be easily integrated into the MLM business.
+
+To understand the Matrix plan, it makes sense to first understand its structure. The matrix  
+has fixed numbers of rows and columns, organizing the numbers in a particular width and depth. 
+Typically, most MLM Matrix plans follow two types of structures; 2x2 or the 3x3, but there are 
+exceptions based on company requirements. All the members in a Matrix Plan are positioned 
+serially from top to bottom or left to right.
 
 ![demo](./doc/images/view.png "")
 
-После закрытия матрицы, человек на 1 уровне получает вознаграждение, а МЛМ матрица делится еще на несколько матриц
-(зависит от типа, например кубическая матрица разделится еще на 3 новые матрицы). После чего новые матрицы ожидают заполнения
-и цикл повторяется.
+After the matrix is filled, user at level 1 receives a reward and the matrix itself is divided into 
+several matrices (depends on matrix pow, for example the cubic matrix will be divided into 3 new matrices). 
+After that, new matrices wait for filling and cycle is repeated.
 
 
-Установка
----------
+Install
+-------
 
-Предпочтительный способ установки этого виджета через [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-Запустите в консоле
+Either run
 
 ```
-php composer.phar require --prefer-dist nepster-web/php-mlm-matrix "*"
+$ php composer.phar require --prefer-dist nepster-web/php-mlm-matrix "*"
 ```
 
-или добавьте
+or add
 
 ```
 "nepster-web/php-mlm-matrix": "*"
 ```
 
-в файл `composer.json` в секцию require.
+to the `require` section of your `composer.json` file.
 
 
-Структура:
+
+Structure
 ---------
 
-**Matrix.php** - Библиотека для работы с матрицами.
+* `demo` - Library demo
+* `doc` - Documentation files for GitHub
+* `shema` - Sample database table schema (MySQL)
+* `src` - Main library code
+* `tests` - Unit tests
 
-**Render.php** - Генератор html кода матрицы.
-
-**shema/matrix.sql** - SQL (MySql) Схема таблиц для матриц.
 
 
+Usage
+-----
 
-Примеры использования:
-----------------------
-
-**Генерация пустой матрицы**
-
+Creating a new matrix object:
 ```php
-$view = 2;
-$level = 3;
-$matrix = new Matrix($view, $level);
-$matrix->generation();
-$matrix->getArray(); // На выходе массив матрицы
+use Nepster\Matrix\Matrix;
+
+$matrix = new Matrix(3, 2);
 ```
 
 
-**Заполняем матрицу пользователями**
-
+Getting information about the matrix:
 ```php
-$users = [
-    [
-        'level' => 0,
-        'number' => 0,
-        'user' => 'Nepster',
-    ]
-];
-$matrix = new Matrix($view, $level);
-$matrix->generation($users);
-$matrix->getArray();
-```    
-
-***Обратите внимание***
-
-Каждый массив должен содержать ключи **level** и **number**, на основе которых определяется позиция в матрице.
-
-Можно использовать callback функцию для персональных задач:
-
-```php
-$users = [
-    [
-        'level' => 0,
-        'number' => 0,
-        'user' => 'Nepster',
-    ]
-];
-$function = function ($l, $n, $user, $matrix) {
-    $user['position'] = $matrix->getPosition($user['level'], $user['number']);
-    return $user;
-};
-$matrix = new Matrix($view, $level);
-$matrix->generation($users, $function);
-$matrix->getArray();
-```    
-
-
-**Все доступные методы**
-
-```php
-// Генерация массива матрицы
-generation(array $users = [], $callback = null)
-
-// Получить массив матрицы
-getArray()
-
-// Вид
-getView()
-
-// Кол-во уровней
-getLevels()
-    
-// Получить координаты позиции
-getCoordByPosition($position)
-
-// Получить номер позиции
-getPosition($level, $number)
-    
-// Получить координаты первой свободной позиции в матрице
-getCoordFirstFreePosition()
-    
-// Получить все свободные координаты в матрице
-getFreeCoords()
-
-// Получить все свободные позиции в матрице
-getFreePositions()
-
-// Проверяет заполнена ли матрица
-isFilled()
-
-// Деление матрицы
-division()
+$matrix->getDepth();
+$matrix->getPow();
 ```
 
 
-**Инструкция**
-
-Для примера в данной библиотеке представлена схема базы данных, которая состоит из 3 таблиц:
-
-    matrix_type - Типы матриц
-    
-    matrix - Все матрицы
-    
-    matrix_users - Пользователи в матрицах
-    
-
-Чтобы работать с матрицами необходимо создать запись в таблице matrix_type (например Пекет №1 за 10$), создать саму матрицу в таблице matrix и активировать пользователей.
-Под активацией пользователей подразумевается записи в таблицу matrix_users. Чтобы показать матрицу на экран, необходимо извлечь массив пользователей 
-и сгенерировать матрицу, после чего обратиться к рендеру.
-
-После каждой активации не забывайте проверять заполнена матрица или нет. Это можно сделать вызвав метод **isFilled()**, который вернет true если в матрице 
-больше нет свободных позиций. В таком случае вам необходимо вызвать метод **division()** и сохранить новые матрицы в таблицу matrix, также не забудьте после деления 
-добавить новые записи в таблицу matrix_users и закрыть старую матрицу присвоив ей определенный статус. 
+Get matrix array:
+```php
+$matrix->toArray();
+```
 
 
-Рендер матрицы:
----------------
+Managing users in the matrix:
+```php
+use Nepster\Matrix\Coord;
+use Nepster\Matrix\Matrix;
+
+$matrix = new Matrix(3, 2);
+
+$matrix->addTenant(null, function() {
+    // return your user data
+})
+
+$matrix->addTenant(new Coord(1, 1), function() {
+    // return your user data
+})
+
+$matrix->hasTenant(new Coord(0, 0));
+$matrix->hasTenant(new Coord(1, 1));
+
+$matrix->removeTenant(new Coord(1, 1));
+```
+
+
+Check the correctness of coordinates:
+```php
+$matrix->isValidCoord(new Coord(0, 0));
+```
+
+
+Check if there are free positions in the matrix:
+```php
+$matrix->isFilled();
+```
+
+[For more examples, see the demo file.](./demo/index.php)
+
+
+How can I use database for matrices? 
+------------------------------------
+
+Based on the different specifics of mlm projects and web development tools,
+this library implements only the algorithm of operation of mlm matrices without storage support.
+
+However, if you works with the database you can easily implement keeping and restore of matrix objects.
+You can study the example in the file [MySQL schema](shema/matrix.sql). 
+
+For example, create a new service that allows you to write and/or restore the matrix object from the database:
 
 ```php
-use nepster\matrix\Matrix;
-use nepster\matrix\Render;
+class MatrixService {
 
-// Генерация матрицы
-$users = [
-    [
-        'level' => 0,
-        'number' => 0,
-        'user' => 'Nepster',
-    ]
-];
-$function = function ($l, $n, $user, $matrix) {
-    $user['position'] = $matrix->getPosition($user['level'], $user['number']);
-    return $user;
-};
-$matrix = new Matrix(2, 3);
-$matrix->generation($users, $function);
-
-
-// Рендер матрицы
-$Render = new Render($matrix);
-$Render->setOptions(['class' => 'matrix']);
-$Render->setLevelOptions(['class' => 'level']);
-$Render->setGroupSeparatorOptions(['class' => 'matrix-group-separator']);
-$Render->setClearOptions(['style' => 'clear:both']);
-$Render->setGroupJoinOptions(['class' => 'matrix-join-group']);
-$Render->registerLevelCallback(function($l, $users) {
-    return '<div class="level-counter">Уровень ' . (++$l) . '</div>';
-});
-$Render->registerCellCallback(function($level, $number, $user, $matrix) {
-    return '<div class="cell">
-            ' . $matrix->getPosition($level, $number) . '
-            <div class="user">
-                  Аватар
-                  <div class="matrix-user-info">
-                    Дополнительная информация
-                  </div>
-            </div>
-            Логин
-        </div>';
-});
-echo $Render->show();
-```
-
-
-**Пример HTML и CSS разметки:**
-
-```
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<title>MLM Матрица</title>
-<style type="text/css">
-    .matrix {
-        margin:auto;
+    public function findById(int $id): Matrix
+    {
+        // You need make a query to the `matrix` table that find the required record
+        // Use join or another query to retrieve user data from the `matrix_users` table
+        // Initialize new Matrix object
+        // Using `addTenant` method that add users to Matrix object (based on data from `matrix_users` table)
+        // Return the proper Matrix object
     }
 
-    .matrix .level {
-        width: 680px;
-        min-height: 20px;
-        margin: 20px auto;
-        text-align: center;
-        clear: both;
-        border: dashed 1px #D3D3D3;
+    public function save(Matrix $matrix): void
+    {
+        // Get the matrix array using the `$matrix->toArray()` method
+        // Create a valid request to save data to the database
+        // - Most likely in a relational database you will have 2 tables (matrices and matrix_users)
+        // - Don`t forget to check a new matrix is being created or edited an already existing matrix
+        
+        // Note1: Write down users with depth and number for further recovery
+        // Note2: Don`t write coordinates with empty positions to the database.
     }
 
-    .matrix .level-counter {
-        margin-bottom: 10px;
-        display: block;
-        text-align: left;
-        font-size: 13px;
-        font-weight: bold;
-        padding: 10px 5px 0 10px;
-    }
+}
+``` 
 
-    .matrix .user {
-        width: 45px;
-        height: 45px;
-        border: double 3px silver;
-        overflow: hidden;
-        font-size: 13px;
-        margin: 5px auto;
-    }
 
-    .matrix .user .avatar {
-        width: 39px;
-        height: 39px;
-        overflow: hidden;
-    }
+Testing
+-------
 
-    .matrix .user .avatar img{
-        width: 39px;
-        min-height: 39px;
-    }
+```$ phpunit```
 
-    .matrix .cell {
-        width: 60px;
-        display: inline-block;
-        border: dashed 1px #D3D3D3;
-        margin: 10px 0px;
-        padding: 5px 1px 5px 1px;
-        overflow: hidden;
-        text-align: center;
-    }
+or 
 
-    .matrix .matrix-join-group {
-        display:inline-block;
-    }
+```$ vendor/bin/phpunit```
 
-    .matrix .matrix-group-separator {
-        width: 10px;
-        display: inline-block;
-    }
 
-    .matrix .matrix-user-info {
-        display: none
-    }
-
-    .matrix .user:hover .matrix-user-info {
-        display: block;
-        position: absolute;
-        width: 200px;
-        min-height: 30px;
-        border: double 3px silver;
-        background: #8BAA79;
-        padding: 10px;
-        margin-left: -3px;
-        margin-top: -3px;
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
-</style>
-
-</head>
-<body>
-
-    // Рендер матрицы
-
-</body>
-</html>
-```
+License
+-------
+This library is licensed under the MIT License - see the LICENSE file for details.
